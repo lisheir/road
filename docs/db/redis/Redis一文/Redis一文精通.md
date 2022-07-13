@@ -36,6 +36,14 @@ Mysql的MemCached也是基于内存的数据库,而memcached的value没有类型
 
 ## 2 数据结构
 
+### 2.0 通用命令
+
+EXISTS 存在
+
+EXPIRE 过期
+
+key没有对应的元素时，会自动删除key；key被监听不必创建空key
+
 ### 2.1 string 字符串
 
 #### 2.1.1 string & integer
@@ -76,7 +84,13 @@ Mysql的MemCached也是基于内存的数据库,而memcached的value没有类型
 - GETBIT
 - SETBIT
 - BITCOUNT
-- BITFIELD
+- BITFIELD：取出字符串指定偏移量(下标)指定长度的带符号或不带符号数字，**很奇怪的命令**
+- BITOP
+- BITOS
+
+#### 2.1.3 HyperLogLogs
+
+
 
 ### 2.2 hashes 键值对
 
@@ -97,7 +111,7 @@ Hash类型是String类型和field和value的映射表，或者说一个String集
 
 ### 2.3 lists 可重复列表
 
-List类型是一个链表结构的集合，其主要功能`push`、`pop`、获取元素等。更详细地说，List类型是一个双端链表的结构，我们可以通过相关操作，进行集合的头部或者尾部添加删除元素，List的设计非常精巧，既可以作为栈，又可以作为队列。满足绝大多数需求。
+List类型是一个链表结构的集合，其主要功能`push`、`pop`、获取元素等。更详细地说，List类型是**一个双端链表**的结构，我们可以通过相关操作，进行集合的头部或者尾部添加删除元素，List的设计非常精巧，既可以作为栈，又可以作为队列。满足绝大多数需求。
 
 **lpush**：从头部加入元素（栈），先进后出
 
@@ -112,7 +126,6 @@ List类型是一个链表结构的集合，其主要功能`push`、`pop`、获�
 **linsert**：插入元素
 
 - `linsert list3 before [集合的元素] [插入的元素]`
-
 - `lset`：将指定下标的元素替换
 - `lrem`：删除元素，返回删除的个数
 - `ltrim`：保留指定key的值范围内的数据
@@ -122,12 +135,14 @@ List类型是一个链表结构的集合，其主要功能`push`、`pop`、获�
 - `lindex`：返回名称为key的list中index位置的元素
 - `llen`：返回元素的个数
 
+BRPOP Block 阻塞  0 作为超时来永久等待元素
+
 ### 2.4 set 无序不重复列表
 
 set集合是String类型的无序集合，set是通过Hashtable实现的，对集合我们可以取交集、并集、差集。
 
 - `sadd`：向名称为key的set中添加元素，set集合不允许重复元素
-- `smembers`查看set集合的元素
+- `smembers`查看set集合中符合某元素的key
 - `srem`：删除set集合元素
 - `spop`：随机返回删除的key
 - `sdiff`：返回两个集合的不同元素（哪个集合在前面就以哪个集合为标准）
