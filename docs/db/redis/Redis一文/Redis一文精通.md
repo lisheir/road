@@ -32,7 +32,21 @@ Mysql的MemCached也是基于内存的数据库,而memcached的value没有类型
 
 查询速度还是跟不上 -> 缓存
 
-<img src="D:\IdeaProject\study\MyStudy\docs\db\redis\Redis一文\image-20220712213202382.png" alt="1" style="zoom:150%;" />
+> 常识：
+>
+> 磁盘：寻址ms级别，带宽为G or M级别
+>
+> 内存：寻址ns级别，带宽极大比磁盘大三个以上的数量级
+>
+> s>ms>微秒>ns  磁盘比内存在寻址上慢了10w倍
+>
+> A
+>
+> I/O buffer：成本问题
+>
+> 磁盘与磁道，扇区，一扇区512B，这带来一个问题——成本变大：索引
+>
+> 4K  操作系统，无论你读多少，都是最少4K从磁盘拿
 
 ## 2 数据结构
 
@@ -78,6 +92,7 @@ key没有对应的元素时，会自动删除key；key被监听不必创建空ke
 - `append[name]`方法：字符串追加方法
 - `strlen[name]`方法：获取字符串的长度
 - `LCS key1 key2 [LEN] [IDX] [MINMATCHLEN len] [WITHMATCHLEN]` :找出两个字符串中最长的重复字符串并截取出来返回
+- GETDEL
 
 #### 2.1.2 bitmap
 
@@ -87,6 +102,7 @@ key没有对应的元素时，会自动删除key；key被监听不必创建空ke
 - BITFIELD：取出字符串指定偏移量(下标)指定长度的带符号或不带符号数字，**很奇怪的命令**
 - BITOP
 - BITOS
+- BITFIELD_RO
 
 #### 2.1.3 HyperLogLogs
 
@@ -172,6 +188,8 @@ set集合是String类型的无序集合，set是通过Hashtable实现的，对�
 - `zcount`：返回集合中score在给定区间中的数量
 - `zremrangebyrank zset [from] [to]`：删除索引
 - `zremrangebyscore zset [from] [to]`：删除指定序号
+
+SortedSet是通过跳表和哈希表的数据结构实现的，跳表解析等我
 
 ## 3 高级特性
 
